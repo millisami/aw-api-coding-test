@@ -10,6 +10,9 @@ Rails.application.routes.draw do
       post "/users/signup", to: "users#create"
       post "/auth/signin", to: "auth#signin"
       get "/me", to: "users#me"
+
+      resources :contents, only: %i[create show update destroy]
+      get "/content", to: "contents#index"
     end
   end
   # Defines the root path route ("/")
