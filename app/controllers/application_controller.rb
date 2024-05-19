@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  before_action :snake_case_params
   before_action :authenticated!
 
   def encode_token(payload)
@@ -28,5 +29,10 @@ class ApplicationController < ActionController::API
     unless !!current_user
       render json: { message: "You are not logged in."}, status: :unauthorized
     end
+  end
+
+  private
+  def snake_case_params
+    request.parameters.deep_transform_keys!(&:underscore)
   end
 end
