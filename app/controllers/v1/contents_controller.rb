@@ -27,9 +27,11 @@ module V1
     # PUT /contents/:id
     def update
       @content = current_user.contents.find(params[:id])
-      @content.update(content_params)
-      render json: V1::ContentSerializer.new(@content), status: :ok
-      # head :no_content
+      if @content.update(content_params)
+        render json: V1::ContentSerializer.new(@content), status: :ok
+      else
+        render json: { error: @content.errors.full_messages }, status: :unprocessable_entity
+      end
     end
 
     # DELETE /contents/:id
