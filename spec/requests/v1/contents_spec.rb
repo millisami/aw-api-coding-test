@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe "Api::V1::Contents", type: :request do
+RSpec.describe "V1::Contents", type: :request do
   let!(:user) { create(:user) }
   let!(:contents) { create_list(:content, 5, user: user) }
   let(:content_id) { contents.last.id }
 
   describe "GET /content" do
     context 'with valid auth token' do
-      before { get '/api/v1/content', headers: {'Authorization' => AuthTokenService.call(user.id)} }
+      before { get '/v1/content', headers: {'Authorization' => AuthTokenService.call(user.id)} }
       
       it "returns contents" do
         expect(json).not_to be_empty
@@ -20,7 +20,7 @@ RSpec.describe "Api::V1::Contents", type: :request do
     end
 
     context 'without auth token' do
-      before { get '/api/v1/content' }
+      before { get '/v1/content' }
 
       it "returns unauthorized 401 status code" do
         expect(response).to have_http_status(:unauthorized)
@@ -30,7 +30,7 @@ RSpec.describe "Api::V1::Contents", type: :request do
 
   describe "GET /contents/:id" do
     context 'with valid auth token' do
-      before { get "/api/v1/contents/#{content_id}", headers: {'Authorization' => AuthTokenService.call(user.id)} }
+      before { get "/v1/contents/#{content_id}", headers: {'Authorization' => AuthTokenService.call(user.id)} }
 
       context "when content exists" do
         it "returns 200 status code" do
@@ -57,7 +57,7 @@ RSpec.describe "Api::V1::Contents", type: :request do
     end
 
     context 'without auth token' do
-      before { get "/api/v1/contents/#{content_id}" }
+      before { get "/v1/contents/#{content_id}" }
 
       it "returns unauthorized 401 status code" do
         expect(response).to have_http_status(:unauthorized)
@@ -76,7 +76,7 @@ RSpec.describe "Api::V1::Contents", type: :request do
 
     context "with valid auth token" do
       context "with valid request attributes" do
-        before { post '/api/v1/contents', params: valid_payload, headers: {'Authorization' => AuthTokenService.call(user.id)} }
+        before { post '/v1/contents', params: valid_payload, headers: {'Authorization' => AuthTokenService.call(user.id)} }
         
         it "returns 201 status code" do
           expect(response).to have_http_status(201)
@@ -84,7 +84,7 @@ RSpec.describe "Api::V1::Contents", type: :request do
       end
 
       context "with invalid request attributes" do
-        before { post '/api/v1/contents', params: {}, headers: {'Authorization' => AuthTokenService.call(user.id)} }
+        before { post '/v1/contents', params: {}, headers: {'Authorization' => AuthTokenService.call(user.id)} }
 
         it "returns 422 status code" do
           expect(response).to have_http_status(422)
@@ -97,7 +97,7 @@ RSpec.describe "Api::V1::Contents", type: :request do
     end
 
     context 'without auth token' do
-      before { post '/api/v1/contents', params: valid_payload, headers: {'Authorization' => ''} }
+      before { post '/v1/contents', params: valid_payload, headers: {'Authorization' => ''} }
 
       it "returns unauthorized 401 status code" do
         expect(response).to have_http_status(:unauthorized)
@@ -112,7 +112,7 @@ RSpec.describe "Api::V1::Contents", type: :request do
 
     context "with valid auth token" do
       context "should be able to update if the content belongs to the user" do
-        before { put "/api/v1/contents/#{content_id}", params: valid_payload, headers: {'Authorization' => AuthTokenService.call(user.id)} }
+        before { put "/v1/contents/#{content_id}", params: valid_payload, headers: {'Authorization' => AuthTokenService.call(user.id)} }
 
         context "when the content exists" do
           it "returns 200 status code" do
@@ -137,7 +137,7 @@ RSpec.describe "Api::V1::Contents", type: :request do
       end
 
       context "should not be able to update if it belongs to other user" do
-        before { put "/api/v1/contents/#{other_content.id}", params: valid_payload, headers: {'Authorization' => AuthTokenService.call(user.id)} }
+        before { put "/v1/contents/#{other_content.id}", params: valid_payload, headers: {'Authorization' => AuthTokenService.call(user.id)} }
 
         context "even if the content exist" do
           it "returns 404 status code" do
@@ -152,12 +152,12 @@ RSpec.describe "Api::V1::Contents", type: :request do
     end
   end
 
-  describe "DELETE /api/v1/contents/:id" do
+  describe "DELETE /v1/contents/:id" do
     let!(:other_content) { create(:content) }
 
     context "with valid auth token" do
       context "should be able to delete only if the content belongs to the user" do
-        before { delete "/api/v1/contents/#{content_id}", headers: {'Authorization' => AuthTokenService.call(user.id)} }
+        before { delete "/v1/contents/#{content_id}", headers: {'Authorization' => AuthTokenService.call(user.id)} }
 
         context "when the content exists" do
           it "returns 200 status code with message" do
@@ -175,7 +175,7 @@ RSpec.describe "Api::V1::Contents", type: :request do
       end
 
       context "should not be able to delete if it belongs to other user" do
-        before { delete "/api/v1/contents/#{other_content.id}", headers: {'Authorization' => AuthTokenService.call(user.id)} }
+        before { delete "/v1/contents/#{other_content.id}", headers: {'Authorization' => AuthTokenService.call(user.id)} }
 
         context "even if the content exist" do
           it "returns 404 status code" do

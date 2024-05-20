@@ -1,4 +1,4 @@
-module Api::V1
+module V1
   class UsersController < ApplicationController
     skip_before_action :authenticated!, only: [:create]
     rescue_from ActiveRecord::RecordInvalid, with: :invalid_record_handler

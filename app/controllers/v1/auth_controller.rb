@@ -1,4 +1,4 @@
-module Api::V1
+module V1
   class AuthController < ApplicationController
     skip_before_action :authenticated!, only: [:signin]
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
