@@ -5,7 +5,6 @@ module Api::V1
 
     def create
       user = User.create!(user_params)
-      @token = encode_token(user_id: user.id)
       render json: V1::UserSerializer.new(user), status: :created
     end
 

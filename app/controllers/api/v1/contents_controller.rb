@@ -1,8 +1,6 @@
 module Api::V1
   class ContentsController < ApplicationController
-    # TODO: Have to delete this before action and wire it up with authentication
-    skip_before_action :authenticated!
-    before_action :set_content, only: %i[show update destroy]
+    rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
     # GET /content
     def index
@@ -12,12 +10,13 @@ module Api::V1
 
     # GET /contents/:id
     def show
+      @content = Content.find(params[:id])
       render json: V1::ContentSerializer.new(@content)
     end
 
     # POST /contents
     def create
-      @content = Content.new(content_params)
+      @content = current_user.contents.build(content_params)
       if @content.save
         render json: V1::ContentSerializer.new(@content), status: :created
       else
@@ -27,14 +26,17 @@ module Api::V1
 
     # PUT /contents/:id
     def update
+      @content = current_user.contents.find(params[:id])
       @content.update(content_params)
-      head :no_content
+      render json: V1::ContentSerializer.new(@content), status: :ok
+      # head :no_content
     end
 
     # DELETE /contents/:id
     def destroy
+      @content = current_user.contents.find(params[:id])
       @content.destroy
-      head :no_content
+      render json: { message: 'Deleted' }, status: :ok
     end
     
     private
@@ -42,9 +44,9 @@ module Api::V1
     def content_params
       params.permit(:title, :body)
     end
-    
-    def set_content
-      @content = Content.find(params[:id])
+
+    def record_not_found(e)
+      render json: { error: e.message }, status: :not_found
     end
   end
 end
