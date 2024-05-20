@@ -5,7 +5,7 @@ class AuthTokenService
 
   def self.call(user_id)
     expiry = 24.hours.from_now.to_i
-    payload = { user_id: user_id, expiry: expiry }
+    payload = { user_id: user_id, exp: expiry }
     JWT.encode payload, HMAC_SECRET, ALGORITHM_TYPE
   end
 
@@ -20,7 +20,7 @@ class AuthTokenService
   end
 
   def self.expired(payload)
-    Time.at(payload['expiry']) < Time.now
+    Time.at(payload['exp']) < Time.now
   end
 
   def self.expired_token
