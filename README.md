@@ -1,24 +1,17 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This repository contains a Rails Api Development Test project for the software engineer role at [AnglesWing](https://angelswing.io/en/).
 
-Things you may want to cover:
+![Github Workflow Status](https://github.com/millisami/aw-api-coding-test/actions/workflows/run_specs.yml/badge.svg)
 
-* Ruby version
+[This is the link for the duplicated Postman specification](https://www.postman.com/millisami/workspace/aw-test/collection/3233-5a4b2bac-dccd-4826-baa8-cb088a074b3f)
 
-* System dependencies
+#### Dependencies and etc
 
-* Configuration
+- Ruby version `ruby-3.2.0`
 
-* Database creation
+- Rails version `7.1`
 
-* Database initialization
+- Database creation `rails db:setup`
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- How to run the test suite `bundle exec rspec`

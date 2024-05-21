@@ -1,4 +1,4 @@
-name: "Run tests"
+name: "Run Specs"
 on:
   push:
     branches:
@@ -33,5 +33,5 @@ jobs:
       - if: always()
         uses: ouzi-dev/commit-status-updater@v2
         with:
-          name: "Run tests"
+          name: "Run Specs"
           status: "${{ job.status }}"
